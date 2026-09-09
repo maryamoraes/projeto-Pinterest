@@ -1,98 +1,197 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import {
+  Image,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+const shareOptions = [
+  { id: 1, name: 'Copiar link', icon: 'link-outline', color: '#444' },
+  { id: 2, name: 'WhatsApp', icon: 'logo-whatsapp', color: '#25D366' },
+  { id: 3, name: 'Mensagens', icon: 'chatbubble-outline', color: '#34C759' },
+  { id: 4, name: 'Facebook', icon: 'logo-facebook', color: '#1877F2' },
+  { id: 5, name: 'Email', icon: 'mail-outline', color: '#ffffff', iconColor: '#000' },
+  { id: 6, name: 'X', icon: 'close-outline', color: '#000' },
+  { id: 7, name: 'Instagram', icon: 'logo-instagram', color: '#E4405F' },
+  { id: 8, name: 'Mais', icon: 'ellipsis-horizontal', color: '#444' },
+];
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const [salvo, setSalvo] = useState(false);
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+
+  function toggleSalvar() {
+    setSalvo(!salvo);
+  }
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* Barra de Topo */}
+      <View style={styles.header}>
+        <Pressable style={styles.topButton}>
+          <Ionicons name="chevron-back" size={24} color="#fff" />
+        </Pressable>
+        <Pressable style={styles.topButton}>
+          <Ionicons name="ellipsis-horizontal" size={24} color="#fff" />
+        </Pressable>
+      </View>
+
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* Card do Pin */}
+        <View style={styles.imageCard}>
+          <Image 
+            source={require('./assets/quadro')} 
+            style={styles.image} 
+          />
+          
+          {}
+          <Pressable
+            style={[styles.checkButton, salvo && styles.checkButtonActive]}
+            onPress={toggleSalvar}
+          >
+            <Ionicons name="checkmark" size={18} color="#fff" />
+          </Pressable>
+        </View>
+
+        {}
+        <View style={styles.dotsContainer}>
+          <View style={[styles.dot, styles.activeDot]} />
+          <View style={styles.dot} />
+          <View style={styles.dot} />
+        </View>
+
+        {}
+        <View style={styles.divider} />
+
+        {}
+        <Text style={styles.shareTitle}>Compartilhar link do Pin</Text>
+
+        {}
+        <View style={styles.shareGrid}>
+          {shareOptions.map((item) => (
+            <Pressable key={item.id} style={styles.shareItem}>
+              <View style={[styles.iconCircle, { backgroundColor: item.color }]}>
+                <Ionicons
+                  name={item.icon as any}
+                  size={24}
+                  color={item.iconColor || '#fff'}
+                />
+              </View>
+              <Text style={styles.shareText} numberOfLines={1}>
+                {item.name}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    flex: 1,
+    backgroundColor: '#000000', 
+  },
+  header: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    zIndex: 10,
+  },
+  topButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#222',
     alignItems: 'center',
-    gap: 8,
+    justifyContent: 'center',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  scrollContent: {
+    alignItems: 'center',
+    paddingBottom: 30,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  imageCard: {
+    width: '85%',
+    height: 380,
+    borderRadius: 24,
+    overflow: 'hidden',
+    marginTop: 10,
+    position: 'relative',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  checkButton: {
     position: 'absolute',
+    bottom: 12,
+    right: 12,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255,255,255,0.4)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkButtonActive: {
+    backgroundColor: '#8B5CF6', 
+  },
+  dotsContainer: {
+    flexDirection: 'row',
+    marginTop: 12,
+    gap: 6,
+  },
+  dot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#555',
+  },
+  activeDot: {
+    backgroundColor: '#fff',
+  },
+  divider: {
+    width: '100%',
+    height: 1,
+    backgroundColor: '#222',
+    marginVertical: 20,
+  },
+  shareTitle: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    alignSelf: 'flex-start',
+    marginLeft: 20,
+    marginBottom: 20,
+  },
+  shareGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: 10,
+  },
+  shareItem: {
+    width: '25%', 
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  iconCircle: {
+    width: 56,
+    height: 56,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 6,
+  },
+  shareText: {
+    color: '#fff',
+    fontSize: 12,
+    textAlign: 'center',
   },
 });
