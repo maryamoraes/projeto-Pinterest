@@ -10,16 +10,7 @@ import {
   View,
 } from 'react-native';
 
-const shareOptions = [
-  { id: 1, name: 'Copiar link', icon: 'link-outline', color: '#444' },
-  { id: 2, name: 'WhatsApp', icon: 'logo-whatsapp', color: '#25D366' },
-  { id: 3, name: 'Mensagens', icon: 'chatbubble-outline', color: '#34C759' },
-  { id: 4, name: 'Facebook', icon: 'logo-facebook', color: '#1877F2' },
-  { id: 5, name: 'Email', icon: 'mail-outline', color: '#ffffff', iconColor: '#000' },
-  { id: 6, name: 'X', icon: 'close-outline', color: '#000' },
-  { id: 7, name: 'Instagram', icon: 'logo-instagram', color: '#E4405F' },
-  { id: 8, name: 'Mais', icon: 'ellipsis-horizontal', color: '#444' },
-];
+import { router } from 'expo-router';
 
 export default function HomeScreen() {
   const [salvo, setSalvo] = useState(false);
@@ -31,7 +22,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Barra de Topo */}
+      {}
       <View style={styles.header}>
         <Pressable style={styles.topButton}>
           <Ionicons name="chevron-back" size={24} color="#fff" />
@@ -42,11 +33,12 @@ export default function HomeScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Card do Pin */}
+        {}
         <View style={styles.imageCard}>
           <Image 
-            source={require('./assets/quadro')} 
-            style={styles.image} 
+            source={require('../../assets/images/quadro.jpg')}
+            style={styles.image}
+            resizeMode="contain" 
           />
           
           {}
@@ -69,27 +61,19 @@ export default function HomeScreen() {
         <View style={styles.divider} />
 
         {}
-        <Text style={styles.shareTitle}>Compartilhar link do Pin</Text>
+        <Text style={styles.shareTitle}>...</Text>
 
-        {}
-        <View style={styles.shareGrid}>
-          {shareOptions.map((item) => (
-            <Pressable key={item.id} style={styles.shareItem}>
-              <View style={[styles.iconCircle, { backgroundColor: item.color }]}>
-                <Ionicons
-                  name={item.icon as any}
-                  size={24}
-                  color={item.iconColor || '#fff'}
-                />
-              </View>
-              <Text style={styles.shareText} numberOfLines={1}>
-                {item.name}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
+        <Pressable 
+          onPress={() => router.push('/detalhes')} 
+          style={styles.detalhesButton}
+          >
+          <Text style={styles.detalhesButtonText}>Ver detalhes</Text>
+        </Pressable>
+
+        
+            
       </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
   );
 }
 
@@ -117,13 +101,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 30,
   },
+
   imageCard: {
-    width: '85%',
-    height: 380,
+    width: 280,          
+    aspectRatio: 1,
     borderRadius: 24,
     overflow: 'hidden',
     marginTop: 10,
     position: 'relative',
+    backgroundColor: '#111',
+    alignSelf: 'center',  
   },
   image: {
     width: '100%',
@@ -171,6 +158,20 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginBottom: 20,
   },
+
+  detalhesButton: {
+  backgroundColor: '#ff3333ff',
+  paddingVertical: 12,
+  paddingHorizontal: 24,
+  borderRadius: 12,
+  marginBottom: 10,
+},
+detalhesButtonText: {
+  color: '#fff',
+  fontWeight: 'bold',
+  textAlign: 'center',
+},
+
   shareGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
